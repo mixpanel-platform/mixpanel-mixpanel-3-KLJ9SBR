@@ -1,15 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/css/reset.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.css">
-    <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
-  </head>
-  <body class="mixpanel-platform-body">
-    <h1>Hello, World!</h1>
-    <script>
-      // Run queries and display results here
-    </script>
-  </body>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.css">
+        <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
+        <script>
+            // create a line chart
+            var lineChart = $('#lineChart').MPChart({chartType: 'line'});
+            // create a dropdown pre-populated with events from the authenticated project
+            $('#eventSelect').MPEventSelect().on('change', function(e, selectedEventName) {
+                // when an event is chosen, run a segmentation query to get counts for that event
+                MP.api.segment(selectedEventName).done(function(queryResults) {
+                    // display the results of the query in a line chart
+                    lineChart.MPChart('setData', queryResults);
+                });
+            });
+        </script>
+    </head>
+    <body class="mixpanel-platform-body">
+        <div class="mixpanel-platform-section">
+            <div id="eventSelect" style="float: left;"></div>
+            <div style="clear: both;"></div>
+            <div id="lineChart" style="margin-top: 10px;"></div>
+        </div>
+    </body>
 </html>
